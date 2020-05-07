@@ -45,22 +45,31 @@ void split(int fd, int max_line, int max_suffix, char *prefix) {
     strcpy(path_parts+strlen(prefix), suffix);
     fd_parts = open(path_parts, O_WRONLY | O_CREATE);
 
-    char buf[1];
+    char buf[1024];
     int num_line = 0;
-    while(read(fd, buf, 1) > 0) {
-        write(fd_parts, buf, 1);
-        if (*buf == '\n') num_line++;
-        if (num_line == max_line) {
-            num_line = 0;
-            close(fd_parts);
-            if (nextSuffix(suffix) == 1) {
-                printf(2, "split: not enough suffix\n");
-                exit();
+    int n;
+    while((n = read(fd, buf, 1024)) > 0) {
+        char *pa = buf;
+        char *pb;
+        while ((pb = strchr(pa, '\n')) > 0) {
+            write(fd_parts, pa, pb-pa+1);
+            if (++num_line == max_line) {
+                 num_line = 0;
+                close(fd_parts);
+                if (nextSuffix(suffix) == 1) {
+                    printf(2, "split: not enough suffix\n");
+                    exit();
+                }
+                strcpy(path_parts+strlen(prefix), suffix);
+                fd_parts = open(path_parts, O_WRONLY | O_CREATE);
             }
-            strcpy(path_parts+strlen(prefix), suffix);
-            fd_parts = open(path_parts, O_WRONLY | O_CREATE);
+            pa = pb+1;
+        }
+        if (pa-buf < strlen(buf)) {
+            write(fd_parts, pa, strlen(pa));
         }
     }
+    close(fd_parts);
 }
 
 int main(int argc, char *argv[]) {
@@ -122,7 +131,6 @@ int main(int argc, char *argv[]) {
             exit();
         }
         split(fd, max_line, max_suffix, prefix);
-
         close(fd);
         exit();
     }
