@@ -3,8 +3,9 @@
 #include "user.h"
 
 char *key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-char buf[3];
+
 void encode (int fd) {
+  char buf[3];
   int n;
   while((n = read(fd, buf, 3)) > 0){
     int bits = 0;

@@ -37,7 +37,7 @@ int checkInt(char *arg) {
 int main(int argc, char *argv[]) {
   for (int i = 1; i < argc; i++) {
     if (checkInt(argv[i]) == 0) {
-      printf(1, "factor: cannot calculate %s\n", argv[i]);
+      printf(2, "factor: cannot calculate %s\n", argv[i]);
     } else {
       int n = atoi(argv[i]);
       printf(1, "%d:", n);

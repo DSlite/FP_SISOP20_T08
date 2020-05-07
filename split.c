@@ -123,6 +123,10 @@ int main(int argc, char *argv[]) {
         }
         split(fd, max_line, max_suffix, prefix);
 
+        // printf(1, "max_line: %d\n", max_line);
+        // printf(1, "max_suffix: %d\n", max_suffix);
+        // printf(1, "prefix: %s\n", prefix);
+        // printf(1, "path: %s\n", argv[pos]);
         close(fd);
         exit();
     }
