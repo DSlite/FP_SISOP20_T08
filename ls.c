@@ -23,6 +23,71 @@ fmtname(char *path)
 }
 
 void
+print_mode(struct stat* st) {
+  if (st->type == T_DIR) {
+    printf(1, "d");
+  } else if (st->type == T_FILE) {
+    printf(1, "-");
+  } else if (st->type == T_DEV) {
+    printf(1, "c");
+  } else {
+    printf(1, "?");
+  }
+
+  if (st->mode.flags.u_r) {
+    printf(1, "r");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.u_w) {
+    printf(1, "w");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.u_x) {
+    printf(1, "x");
+  } else {
+    printf(1, "-");
+  }
+  if (st->mode.flags.g_r) {
+    printf(1, "r");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.g_w) {
+    printf(1, "w");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.g_x) {
+    printf(1, "x");
+  } else {
+    printf(1, "-");
+  }
+  if (st->mode.flags.o_r) {
+    printf(1, "r");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.o_w) {
+    printf(1, "w");
+  } else {
+    printf(1, "-");
+  }
+
+  if (st->mode.flags.o_x) {
+    printf(1, "x");
+  } else {
+    printf(1, "-");
+  }
+}
+
+void
 ls(char *path)
 {
   char buf[512], *p;
@@ -41,9 +106,12 @@ ls(char *path)
     return;
   }
 
+  printf(1, "mode\t\tname\t\tinode\tsize\n");
+
   switch(st.type){
   case T_FILE:
-    printf(1, "%s %d %d %d\n", fmtname(path), st.type, st.ino, st.size);
+    print_mode(&st);
+    printf(1, "\t%s\t%d\t%d\n", fmtname(path), st.ino, st.size);
     break;
 
   case T_DIR:
@@ -63,7 +131,8 @@ ls(char *path)
         printf(1, "ls: cannot stat %s\n", buf);
         continue;
       }
-      printf(1, "%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      print_mode(&st);
+      printf(1, "\t%s\t%d\t%d\n", fmtname(buf), st.ino, st.size);
     }
     break;
   }

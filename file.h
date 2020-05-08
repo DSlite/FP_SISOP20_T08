@@ -21,6 +21,7 @@ struct inode {
   short major;
   short minor;
   short nlink;
+  union mode_t mode;
   uint size;
   uint addrs[NDIRECT+1];
 };

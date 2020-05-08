@@ -442,3 +442,15 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int
+sys_chmod(void)
+{
+  char *pathname;
+  int mode;
+  if (argstr(0, &pathname) < 0) return -1;
+  if (argint(1, &mode) < 0) return -1;
+  struct inode *ip = namei(pathname);
+  if (!ip) return -1;
+  return chmod(ip, mode);
+}
