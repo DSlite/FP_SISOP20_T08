@@ -38,7 +38,7 @@ void split(int fd, int max_line, int max_suffix, char *prefix) {
     for (int i = 0; i < max_suffix; i++) {
         suffix[i] = *default_suffix;
     }
-
+    
     int fd_parts;
     char path_parts[1000];
     strcpy(path_parts, prefix);
@@ -68,6 +68,7 @@ void split(int fd, int max_line, int max_suffix, char *prefix) {
         if (pa-buf < strlen(buf)) {
             write(fd_parts, pa, strlen(pa));
         }
+        memset(buf, 0, 1024);
     }
     close(fd_parts);
 }

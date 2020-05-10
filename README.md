@@ -601,6 +601,7 @@ Pendefinisan variabel `fd_parts` untuk menyimpan splitted file yang akan diuat, 
         if (pa-buf < strlen(buf)) {
             write(fd_parts, pa, strlen(pa));
         }
+        memset(buf, 0, 1024);
     }
     close(fd_parts);
 }
@@ -612,7 +613,7 @@ Kemudian `while()` loop kedua akan melakukan iterasi selama menemukan `\n` (poin
 
 Kemudian akan dicek jika `num_line` yang telah di-increment sama dengan `max_line`. Jika sudah sama, maka suffix perlu diganti menjadi suffix berikutnya. Step pertama adalah mereset nilai `num_line`. lalu `fd_parts` di `close()`. Lalu akan dijalankan fungsi `nextSuffix()` pada `suffix`, jika yang direturn merupakan `1` (sudah mencapai maximum suffix), maka akan diprint error dan program langsung di `exit(0)`. Jika suffix tersebut masih dapat di `nextSuffix()`, maka akan dibuat path yang mengarah ke `path_parts` sesuai dengan `suffix` yang baru. Lalu `path_parts` tersebut akan diopen kembali dan disimpan pada `fd_parts`. Lalu `*pa` akan diset menjadi pointer `*pb+1` (satu karakter setelah karakter yang ditunjuk `pb`);
 
-Kemudian jika `pa-buf < strlen(buf)` maka `pa` akan di `write()` kedalam `fd_parts` yang dengan panjang `pa`. Hal tersebut dilakukan untuk mengwrite string terakhir yang tidak masuk dalam `while()` loop. Lalu setelah semua karakter pada `fd` telah terbaca, maka `fd_parts` akan di `close()`.
+Kemudian jika `pa-buf < strlen(buf)` maka `pa` akan di `write()` kedalam `fd_parts` yang dengan panjang `pa`. Hal tersebut dilakukan untuk mengwrite string terakhir yang tidak masuk dalam `while()` loop. Lalu setelah semua karakter pada `fd` telah terbaca, karakter pada `buf` akan direset dan `fd_parts` akan di `close()`.
 
 
 #### Fungsi main
